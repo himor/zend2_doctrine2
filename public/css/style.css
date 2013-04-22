@@ -1,0 +1,21 @@
+body {
+	background-color: #eee;
+}
+
+#wrap {
+	background-color: #fff;
+	width:900px;
+	margin:auto;
+	display:block;
+	min-height: 700px;
+	padding: 20px 10px;
+}
+
+table td {
+	cursor: pointer;
+}
+
+#rightHolder {
+	float:right;
+	width:40%;
+}

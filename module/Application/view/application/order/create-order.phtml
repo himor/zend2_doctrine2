@@ -1,0 +1,27 @@
+<h3>Select items:</h3>
+<form method="post" action="/order/createOrder">
+	<table class="table">
+	<thead>
+		<tr>
+			<th>id</th>
+			<th>name</th>
+			<th>in stock</th>
+		</tr>
+	</thead>
+	<tbody>
+		<?php foreach ($items as $o):?>
+		<tr>
+			<td>
+			<input type="checkbox" name="item[]" value="<?php echo $o->getId();?>" />
+			<?php echo $o->getId();?></td>
+			<td><?php echo $o->getName();?></td>
+			<td><?php echo $o->getCount();?></td>
+		</tr>
+		<?php endforeach;?>
+	</tbody>
+	</table>
+	
+	<button type="submit" class="btn btn-success">Create order</button>
+	<a href="/order" class="btn">Cancel</a>
+
+</form>
