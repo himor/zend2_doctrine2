@@ -1,8 +1,6 @@
 <?php
 namespace Application\Form;
 
-use Application\Entity\Item;
-
 use Zend\Form\Form;
 use Zend\Stdlib\Hydrator\ClassMethods as ClassMethodsHydrator;
 
