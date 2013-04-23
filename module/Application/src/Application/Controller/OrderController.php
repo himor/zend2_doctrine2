@@ -4,10 +4,13 @@ namespace Application\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
+
 use Application\Entity\Order;
 use Application\Entity\Item;
 use Application\Entity\OrderItem;
 use Application\Entity\User;
+
+use Application\Form\ItemForm;
 
 class OrderController extends AbstractActionController {
 	
@@ -51,6 +54,10 @@ class OrderController extends AbstractActionController {
 		));
 	}
 	
+	/**
+	 * axaj call
+	 * @return \Zend\View\Model\ViewModel
+	 */
 	public function getItemsAction() {
 		$id = (int) $this->params()->fromRoute('id', 0);
 		$this->layout('layout/empty');
@@ -61,6 +68,27 @@ class OrderController extends AbstractActionController {
 			'orderId' => $id,
 		));
 	}
+	
+	
+	public function createItemAction() {
+		$form = new ItemForm();
+		$item = new Item();
+		$form->bind ($item);
+		if ($this->request->isPost()) {
+			$form->setInputFilter($item->getInputFilter());
+            $form->setData($this->request->getPost());
+            if ($form->isValid()) {
+            	$em = $this->getEm();
+				$em->persist($item);
+				$em->flush();
+				return $this->redirect()->toRoute('home/orders');
+			}
+		}
+		return new ViewModel(array(
+				'form' => $form,
+		));
+	}
+	
 	
 	
 }

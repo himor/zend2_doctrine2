@@ -1,4 +1,10 @@
-<h3>Select items:</h3>
+<?php
+	$title = 'Create order';
+	$this->headTitle($title);
+?>
+<h3>
+	<?php echo $this->escapeHtml($title); ?>
+</h3>
 <form method="post" action="/order/createOrder">
 	<table class="table">
 	<thead>

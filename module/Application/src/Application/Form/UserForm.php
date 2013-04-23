@@ -1,12 +1,14 @@
 <?php
-namespace Album\Form;
+namespace Application\Form;
 
 use Zend\Form\Form;
 
 class UserForm extends Form {
 	
     public function __construct() {
-        // we want to ignore the name passed
+        
+    	parent::__construct('createUser');
+        
         $this->setAttribute('method', 'post');
         $this->add(array(
             'name' => 'id',

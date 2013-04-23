@@ -19,3 +19,8 @@ table td {
 	float:right;
 	width:40%;
 }
+
+label span {
+	display:inline-block;
+	min-width: 150px;
+}
