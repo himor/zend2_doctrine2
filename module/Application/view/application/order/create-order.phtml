@@ -12,7 +12,6 @@
 			<th>id</th>
 			<th>name</th>
 			<th>in stock</th>
-			<th>buy</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -23,7 +22,6 @@
 			<?php echo $o->getId();?></td>
 			<td><?php echo $o->getName();?></td>
 			<td><?php echo $o->getCount();?></td>
-			<td><input class="input-small" type="number" name="itemCount_<?php echo $o->getId();?>" value="1" /></td>
 		</tr>
 		<?php endforeach;?>
 	</tbody>

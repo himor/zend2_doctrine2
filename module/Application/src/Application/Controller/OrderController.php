@@ -11,14 +11,13 @@ use Application\Entity\OrderItem;
 use Application\Entity\User;
 
 use Application\Form\ItemForm;
-use Application\Form\ItemFormValidator;
 
 class OrderController extends AbstractActionController {
 	
 	public function getEm() {
 		return $this
-			->getServiceLocator()
-			->get('Doctrine\ORM\EntityManager');
+		->getServiceLocator()
+		->get('Doctrine\ORM\EntityManager');
 	}
 	
 	public function indexAction() {
@@ -40,10 +39,9 @@ class OrderController extends AbstractActionController {
 			$sels = $this->getRequest()->getPost('item', null);
 			if (count($sels)) {
 				foreach ($sels as $s) {
-					$itemCount = $this->getRequest()->getPost('itemCount_'.$s, 1);
 					$sold = $itemRepo->findOneById($s);
-					$order->addItem($sold, $itemCount);
-					$sold->setCount($sold->getCount() - $itemCount); // decrease count
+					$order->addItem($sold, 1);
+					$sold->setCount($sold->getCount() - 1); // decrease count
 					$em->persist($sold);
 				}					
 				$em->persist($order);
@@ -57,7 +55,7 @@ class OrderController extends AbstractActionController {
 	}
 	
 	/**
-	 * ajax call
+	 * axaj call
 	 * @return \Zend\View\Model\ViewModel
 	 */
 	public function getItemsAction() {
@@ -71,12 +69,13 @@ class OrderController extends AbstractActionController {
 		));
 	}
 	
+	
 	public function createItemAction() {
 		$form = new ItemForm();
 		$item = new Item();
 		$form->bind ($item);
 		if ($this->request->isPost()) {
-			$form->setInputFilter((new ItemFormValidator())->getInputFilter());
+			$form->setInputFilter($item->getInputFilter());
             $form->setData($this->request->getPost());
             if ($form->isValid()) {
             	$em = $this->getEm();
@@ -86,7 +85,7 @@ class OrderController extends AbstractActionController {
 			}
 		}
 		return new ViewModel(array(
-			'form' => $form,
+				'form' => $form,
 		));
 	}
 	

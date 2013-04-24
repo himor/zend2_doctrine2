@@ -112,8 +112,7 @@ return array(
     'controllers' => array(
         'invokables' => array(
             'Application\Controller\Index' => 'Application\Controller\IndexController',
-            'Application\Controller\Order' => 'Application\Controller\OrderController',
-            'Application\Controller\User' => 'Application\Controller\UserController'
+            'Application\Controller\Order' => 'Application\Controller\OrderController'
         ),
     ),
     'view_manager' => array(
