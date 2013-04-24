@@ -76,7 +76,8 @@ class OrderController extends AbstractActionController {
 		$item = new Item();
 		$form->bind ($item);
 		if ($this->request->isPost()) {
-			$form->setInputFilter((new ItemFormValidator())->getInputFilter());
+			$validator = new ItemFormValidator();
+			$form->setInputFilter($validator->getInputFilter());
             $form->setData($this->request->getPost());
             if ($form->isValid()) {
             	$em = $this->getEm();

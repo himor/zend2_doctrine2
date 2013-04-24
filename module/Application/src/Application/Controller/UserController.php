@@ -30,7 +30,8 @@ class UserController extends AbstractActionController {
 		$user = new User();
 		$form->bind ($user);
 		if ($this->request->isPost()) {
-			$form->setInputFilter((new UserFormValidator())->getInputFilter());
+			$validator = new UserFormValidator();
+			$form->setInputFilter($validator->getInputFilter());
             $form->setData($this->request->getPost());
             if ($form->isValid()) {
             	$em = $this->getEm();

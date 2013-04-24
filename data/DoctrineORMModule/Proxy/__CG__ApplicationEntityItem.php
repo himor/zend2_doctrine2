@@ -81,12 +81,6 @@ class Item extends \Application\Entity\Item implements \Doctrine\ORM\Proxy\Proxy
         return parent::setCount($count);
     }
 
-    public function getInputFilter()
-    {
-        $this->__load();
-        return parent::getInputFilter();
-    }
-
 
     public function __sleep()
     {

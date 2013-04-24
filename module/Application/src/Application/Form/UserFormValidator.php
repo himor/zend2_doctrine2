@@ -19,7 +19,7 @@ class UserFormValidator {
             )));
 
             $inputFilter->add($factory->createInput(array(
-                'name'     => 'fullname',
+                'name'     => 'fullName',
                 'required' => true,
                 'filters'  => array(
                     array('name' => 'StripTags'),
