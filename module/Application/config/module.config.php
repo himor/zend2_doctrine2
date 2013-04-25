@@ -7,8 +7,7 @@
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
 
-return array(
-	
+$config =  array(
 	'doctrine' => array(
 		'driver' => array(
 			'application_entities' => array(
@@ -90,6 +89,16 @@ return array(
                     				),
                     		),
                     ),
+                    'security' => array(
+                    		'type'    => 'Segment',
+                    		'options' => array(
+                    				'route'    => 'security',
+                    				'defaults' => array(
+                    						'controller' => 'Application\Controller\Security',
+                    						'action'     => 'index',
+                    				),
+                    		),
+                    ),
                 ),
             ),
         ),
@@ -111,9 +120,10 @@ return array(
     ),
     'controllers' => array(
         'invokables' => array(
-            'Application\Controller\Index' => 'Application\Controller\IndexController',
-            'Application\Controller\Order' => 'Application\Controller\OrderController',
-            'Application\Controller\User' => 'Application\Controller\UserController'
+            'Application\Controller\Index' 		=> 'Application\Controller\IndexController',
+            'Application\Controller\Order' 		=> 'Application\Controller\OrderController',
+            'Application\Controller\User'		=> 'Application\Controller\UserController',
+            'Application\Controller\Security' 	=> 'Application\Controller\SecurityController',
         ),
     ),
     'view_manager' => array(
@@ -134,3 +144,5 @@ return array(
         ),
     ),
 );
+
+return $config;
