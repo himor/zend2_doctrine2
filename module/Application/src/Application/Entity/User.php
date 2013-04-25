@@ -14,14 +14,17 @@
 	    */
 	    protected $id;
 	
-	    /** @ORM\Column(type="string", length=50) */
+	    /** @ORM\Column(type="string", length=127) */
 	    protected $fullName;
 	    
-	    /** @ORM\Column(type="string", length=20) */
+	    /** @ORM\Column(type="string", length=63) */
 	    protected $username;
 	    
-	    /** @ORM\Column(type="string", length=50) */
+	    /** @ORM\Column(type="string", length=127) */
 	    protected $password;
+	    
+	    /** @ORM\Column(type="string", length=31) */
+	    protected $role;
 	    
 	    /**
 	     * @ORM\OneToMany(targetEntity="Application\Entity\Order", mappedBy="user")
@@ -74,7 +77,14 @@
 	    	$this->order->add($order);
 	    	$order->setUser($this);
 	    }
-	     
+	    
+	    public function getRole() {
+	    	return $this->role;
+	    }
+	    
+	    public function setRole($role) {
+	    	$this->role = $role;
+	    }
 	    
 	    
 	}
