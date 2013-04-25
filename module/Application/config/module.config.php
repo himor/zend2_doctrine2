@@ -92,7 +92,11 @@ $config =  array(
                     'security' => array(
                     		'type'    => 'Segment',
                     		'options' => array(
-                    				'route'    => 'security',
+                    				'route'    => 'security[/][:action][/:id]',
+                    				'constraints' => array(
+                    						'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                    						'id'     => '[0-9]+',
+                    				),
                     				'defaults' => array(
                     						'controller' => 'Application\Controller\Security',
                     						'action'     => 'index',
@@ -124,6 +128,7 @@ $config =  array(
             'Application\Controller\Order' 		=> 'Application\Controller\OrderController',
             'Application\Controller\User'		=> 'Application\Controller\UserController',
             'Application\Controller\Security' 	=> 'Application\Controller\SecurityController',
+            'Application\Controller\Access' 	=> 'Application\Controller\AccessController',
         ),
     ),
     'view_manager' => array(

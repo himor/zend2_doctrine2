@@ -9,6 +9,7 @@ use Application\Entity\User;
 use Application\Form\LoginForm;
 use Application\Form\LoginFormValidator;
 use Application\Security\SecurityAdapter;
+use Application\Security\AccessManager;
 use Zend\Authentication\AuthenticationService;
 use Zend\Authentication\Storage\Session as SessionStorage;
 
@@ -20,6 +21,9 @@ class SecurityController extends AbstractActionController {
 			->get('Doctrine\ORM\EntityManager');
 	}
 	
+	/**
+	 * Login action /security
+	 */
 	public function indexAction() {
 		$form = new LoginForm();
 		if ($this->request->isPost()) {
@@ -45,6 +49,26 @@ class SecurityController extends AbstractActionController {
 			'form' => $form,
 			'failure' => (isset ($failure) ? true : false),
 		));
+	}
+	
+	/**
+	 * Logout action /security/logout
+	 */
+	public function logoutAction() {
+		$authService = new AuthenticationService();
+		$authService->clearIdentity();
+		return $this->redirect()->toRoute('home/security');
+	}
+	
+	/**
+	 * test action
+	 */
+	public function viewAction() {
+		$access = new AccessManager();
+		if (!$access->checkIdentity($this->getEm(), '/security/userroles')) {
+			return $this->redirect()->toRoute('home/security');
+		}
+		return $this->redirect()->toRoute('home/orders');		
 	}
 	
 }

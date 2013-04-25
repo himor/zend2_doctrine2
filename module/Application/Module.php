@@ -11,9 +11,7 @@ namespace Application;
 
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
-use Application\Security\SecurityAdapter;
 use Zend\Authentication\AuthenticationService;
-use Zend\Authentication\Storage\Session as SessionStorage;
 
 class Module {
 	
@@ -39,6 +37,7 @@ class Module {
     	$this->updateIdentity();
         $x = include __DIR__ . '/config/module.config.php';
         if (!$this->identity) {
+        	// make key routes unaccessible
         	$x['router']['routes']['home']['child_routes']['orders'] =
         		array(
 	        			'type'    => 'Segment',

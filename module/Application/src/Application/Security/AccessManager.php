@@ -10,12 +10,16 @@ namespace Application\Security;
 use Zend\Permissions\Acl\Acl;
 use Zend\Permissions\Acl\Role\GenericRole as Role;
 use Zend\Permissions\Acl\Resource\GenericResource as Resource;
+use Zend\Authentication\AuthenticationService;
+
 use Doctrine\ORM\EntityManager;
 use Application\Entity\Access;
+
 
 class AccessManager {
 		
 	private $acl;
+	private $em;
 	
 	const YES = 1;
 	const NO  = 0;
@@ -23,7 +27,7 @@ class AccessManager {
 	/**
 	 * Building the resource table from the database
 	 */
-	function __construct(EntityManager $em = null) {
+	public function initializeAccess() {
 		$acl = new Acl();
 		
 		$acl->addRole(new Role('admin'))
@@ -31,8 +35,15 @@ class AccessManager {
 			->addRole(new Role('finance'))
 			->addRole(new Role('client'));
 		
-		$accessRepo = $em->getRepository('Application\Entity\Access');
-		$access = $accessRepo->findAdd();
+		// define main security list
+		$acl->addResource(new Resource('/security/resources'));
+		$acl->addResource(new Resource('/security/userroles'));
+		$acl->allow('admin', '/security/resources');
+		$acl->allow('admin', '/security/userroles');
+		// EOF define main security list
+		
+		$accessRepo = $this->em->getRepository('Application\Entity\Access');
+		$access = $accessRepo->findAll();
 		
 		foreach ($access as $a) {
 			$newRes = new Resource($a->getResource());
@@ -43,15 +54,23 @@ class AccessManager {
 			if ($a->getPermit() == AccessManager::NO)
 				$acl->deny($a->getRole(), $a->getResource());
 		}
-
-		$this->acl = $acl;	
+		
+		$this->acl = $acl;
 	}
-	
+
 	/**
-	 * Checks if user can access the resource
+	 * Overloader
 	 */
-	function isAllowed($identity_role, $resource) {
-		return $this->acl->isAllowed($identity_role, $resource);
+	public function checkIdentity($em, $resource) {
+		$this->em = $em;
+		$this->initializeAccess();
+		$auth = new AuthenticationService();
+		if ($auth->hasIdentity()) {
+			// Identity exists; get it
+			$identity = $auth->getIdentity();
+			return $this->acl->isAllowed($identity['role'], $resource);
+		} else
+			return false;
 	}
 	
 }

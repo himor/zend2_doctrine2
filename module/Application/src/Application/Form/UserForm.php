@@ -26,7 +26,7 @@ class UserForm extends Form {
                 'type'  => 'text',
             ),
             'options' => array(
-                'label' => 'Full name: ',
+                'label' => 'Полное имя: ',
             ),
         ));
         $this->add(array(
@@ -35,7 +35,7 @@ class UserForm extends Form {
                 'type'  => 'text',
             ),
             'options' => array(
-                'label' => 'User name:',
+                'label' => 'Логин: ',
             ),
         ));
         $this->add(array(
@@ -44,9 +44,22 @@ class UserForm extends Form {
                 	'type'  => 'password',
             	),
         		'options' => array(
-        			'label' => 'Enter password:',
+        			'label' => 'Пароль: ',
         		),
         ));
+        $this->add(array(
+        		'type' => 'Zend\Form\Element\Select',
+        		'name' => 'role',
+        		'options' => array(
+        				'label' => 'Группа: ',
+        				'value_options' => array(
+        						'client' => 'Клиент',
+        						'employee' => 'Сотрудник',
+        						'finance' => 'Бухгалтер',
+        						'admin' => 'Администратор',
+        				),
+        		)
+        ));               
        $this->add(array(
             'name' => 'submit',
             'attributes' => array(

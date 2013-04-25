@@ -36,15 +36,19 @@ class SecurityAdapter implements AdapterInterface {
 	 *               If authentication cannot be performed
 	 */
 	public function authenticate() {
+		$identity = array('username' => $this->username,
+				'role' => null);
 		$em = $this->em;
 		$userRepo = $em->getRepository('Application\Entity\User');
 		$user = $userRepo->findOneBy(array('username' => $this->username));
 		if (!$user) {
-			return new AuthResult(AuthResult::FAILURE, $this->username);
+			return new AuthResult(AuthResult::FAILURE, $identity);
 		}
-		if ($user->getPassword() == $this->password) 
-			return new AuthResult(AuthResult::SUCCESS, $this->username);
-		else 
-			return new AuthResult(AuthResult::FAILURE, $this->username);
+		if ($user->getPassword() == $this->password) {
+			$identity = array('username' => $user->getUsername(),
+							  'role' => $user->getRole());
+			return new AuthResult(AuthResult::SUCCESS, $identity);
+		} else 
+			return new AuthResult(AuthResult::FAILURE, $identity);
 	}
 }

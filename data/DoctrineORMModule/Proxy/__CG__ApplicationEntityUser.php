@@ -105,10 +105,22 @@ class User extends \Application\Entity\User implements \Doctrine\ORM\Proxy\Proxy
         return parent::addOrder($order);
     }
 
+    public function getRole()
+    {
+        $this->__load();
+        return parent::getRole();
+    }
+
+    public function setRole($role)
+    {
+        $this->__load();
+        return parent::setRole($role);
+    }
+
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'id', 'fullName', 'username', 'password', 'orders');
+        return array('__isInitialized__', 'id', 'fullName', 'username', 'password', 'role', 'orders');
     }
 
     public function __clone()

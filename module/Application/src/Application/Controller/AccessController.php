@@ -8,8 +8,8 @@ class AccessController extends AbstractActionController {
 
 	public function getEm() {
 		return $this
-		->getServiceLocator()
-		->get('Doctrine\ORM\EntityManager');
+			->getServiceLocator()
+			->get('Doctrine\ORM\EntityManager');
 	}
 	
 	
