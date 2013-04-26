@@ -5,6 +5,7 @@ namespace Application\Security;
 use Zend\Authentication\Adapter\AdapterInterface;
 use Zend\Authentication\Result as AuthResult;
 use Application\Entity\User;
+use Zend\Crypt\Password\Bcrypt;
 
 class SecurityAdapter implements AdapterInterface {
 	
@@ -44,7 +45,8 @@ class SecurityAdapter implements AdapterInterface {
 		if (!$user) {
 			return new AuthResult(AuthResult::FAILURE, $identity);
 		}
-		if ($user->getPassword() == $this->password) {
+		$bcrypt = new Bcrypt();
+		if ($bcrypt->verify($this->password, $user->getPassword())) {
 			$identity = array('username' => $user->getUsername(),
 							  'role' => $user->getRole());
 			return new AuthResult(AuthResult::SUCCESS, $identity);

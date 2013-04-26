@@ -3,6 +3,7 @@
 namespace Application\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
+use Zend\Crypt\Password\Bcrypt;
 use Zend\View\Model\ViewModel;
 
 use Application\Entity\Order;
@@ -33,6 +34,10 @@ class UserController extends AbstractActionController {
 			$form->setInputFilter(UserFormValidator::getInputFilter());
             $form->setData($this->request->getPost());
             if ($form->isValid()) {
+            	// use BCrypt to create the password
+            	$bcrypt = new Bcrypt();
+            	$securePass = $bcrypt->create($user->getPassword());
+            	$user->setPassword($securePass);
             	$em = $this->getEm();
 				$em->persist($user);
 				$em->flush();

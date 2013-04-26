@@ -2,7 +2,8 @@
 
 /**
  * AccessManager 
- * @author Mike Gordo mgordo@live.com
+ * @author Mike Gordo mgordo@live.com 
+ * Apr 25, 2013
  */
 
 namespace Application\Security;
@@ -14,7 +15,6 @@ use Zend\Authentication\AuthenticationService;
 
 use Doctrine\ORM\EntityManager;
 use Application\Entity\Access;
-
 
 class AccessManager {
 		
