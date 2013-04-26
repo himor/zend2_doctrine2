@@ -64,7 +64,7 @@ class UserForm extends Form {
             'name' => 'submit',
             'attributes' => array(
                 'type'  => 'submit',
-                'value' => 'Create User',
+                'value' => 'Создать пользователя',
             	'class' => 'btn btn-primary',
                 'id' => 'submitbutton',
             ),

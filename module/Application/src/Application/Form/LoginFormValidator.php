@@ -19,13 +19,25 @@ class LoginFormValidator {
             		),
             		'validators' => array(
             				array(
-            						'name'    => 'StringLength',
-            						'options' => array(
-            								'encoding' => 'UTF-8',
-            								'min'      => 1,
-            								'max'      => 20,
-            						),
-            				),
+		                		'name' =>'NotEmpty',
+		                		'options' => array(
+		                			'messages' => array(
+		                				\Zend\Validator\NotEmpty::IS_EMPTY => 'Логин не может быть пустым.'
+		                			),
+		                		),
+		                	),
+		                    array(
+		                        'name'    => 'StringLength',
+		                        'options' => array(
+		                            'encoding' => 'UTF-8',
+		                            'min'      => 5,
+		                            'max'      => 20,
+		                        	'messages' => array(
+		                        		'stringLengthTooShort' => 'Пожалуйста введите строку длиной от 5 до 20 символов!',
+		                        		'stringLengthTooLong' => 'Пожалуйста введите строку длиной от 5 до 20 символов!'
+		                        	),
+		                        ),
+		                    ),
             		),
             )));
             
@@ -38,13 +50,25 @@ class LoginFormValidator {
             		),
             		'validators' => array(
             				array(
-            						'name'    => 'StringLength',
+            						'name' =>'NotEmpty',
             						'options' => array(
-            								'encoding' => 'UTF-8',
-            								'min'      => 1,
-            								'max'      => 20,
+            								'messages' => array(
+            										\Zend\Validator\NotEmpty::IS_EMPTY => 'Пожалуйста введите пароль.'
+            								),
             						),
             				),
+            				array(
+		                        'name'    => 'StringLength',
+		                        'options' => array(
+		                            'encoding' => 'UTF-8',
+		                            'min'      => 5,
+		                            'max'      => 20,
+		                        	'messages' => array(
+		                        		'stringLengthTooShort' => 'Пожалуйста введите строку длиной от 5 до 20 символов!',
+		                        		'stringLengthTooLong' => 'Пожалуйста введите строку длиной от 5 до 20 символов!'
+		                        	),
+		                        ),
+		                    ),
             		),
             )));
 

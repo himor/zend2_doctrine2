@@ -1,14 +1,19 @@
 <?php
-	$title = 'Login';
+	$title = 'Вход в систему';
 	$this->headTitle($title);
 ?>
 <h3>
 	<?php echo $this->escapeHtml($title); ?>
 </h3>
+<fieldset class="w50">
 <?php
 
+	if ($reason == 2) {
+		echo "<div class='alert alert-info'>У вас не достаточно прав для доступа к странице.</div>";
+	}
+
 	if ($failure) {
-		echo "<h4>Incorrect username / password.</h4>";
+		echo "<h4 class='alert alert-error'>Неправильное имя пользователя или пароль.</h4>";
 	}
 
 	$form = $this->form;
@@ -17,12 +22,21 @@
 	
 	echo $this->form()->openTag($form);
 	
-	echo $this->formRow($form->get('username'));
-	echo $this->formRow($form->get('password'));
+	echo $this->formLabel($form->get('username'));
+	echo $this->formText($form->get('username'));
+	echo $this->formElementErrors($form->get('username'), array('class' => 'alert alert-warning'));
+	
+	echo "<br>";
+	
+	echo $this->formLabel($form->get('password'));
+	echo $this->formPassword($form->get('password'));
+	echo $this->formElementErrors($form->get('password'), array('class' => 'alert alert-warning'));
+	
+	echo "<br>";
 	
 	echo $this->formHidden($form->get('csrf'));
 	echo $this->formElement($form->get('submit'));
 	echo $this->form()->closeTag();
 	
 ?>
-
+</fieldset>

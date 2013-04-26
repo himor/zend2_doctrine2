@@ -25,6 +25,7 @@ class SecurityController extends AbstractActionController {
 	 * Login action /security
 	 */
 	public function indexAction() {
+		$reasonId = (int) $this->params()->fromRoute('id', 0);
 		$form = new LoginForm();
 		if ($this->request->isPost()) {
 			$form->setInputFilter(LoginFormValidator::getInputFilter());
@@ -48,6 +49,7 @@ class SecurityController extends AbstractActionController {
 		return new ViewModel(array(
 			'form' => $form,
 			'failure' => (isset ($failure) ? true : false),
+			'reason' => $reasonId
 		));
 	}
 	
@@ -66,7 +68,7 @@ class SecurityController extends AbstractActionController {
 	public function viewAction() {
 		$access = new AccessManager();
 		if (!$access->checkIdentity($this->getEm(), '/security/userroles')) {
-			return $this->redirect()->toRoute('home/security');
+			return $this->redirect()->toRoute('home/security', array('id'=>2));
 		}
 		return $this->redirect()->toRoute('home/orders');		
 	}

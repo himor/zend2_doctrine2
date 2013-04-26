@@ -3,6 +3,7 @@ namespace Application\Form;
 
 use Zend\InputFilter\Factory as InputFactory;
 use Zend\InputFilter\InputFilter;
+//use Zend\Validator\NotEmpty;
 
 class UserFormValidator {
 	// Validation
@@ -26,12 +27,24 @@ class UserFormValidator {
                     array('name' => 'StringTrim'),
                 ),
                 'validators' => array(
+                	array(
+                		'name' =>'NotEmpty',
+                		'options' => array(
+                			'messages' => array(
+                				\Zend\Validator\NotEmpty::IS_EMPTY => 'Имя пользователя не может быть пустым.'
+                			),
+                		),
+                	),
                     array(
                         'name'    => 'StringLength',
                         'options' => array(
                             'encoding' => 'UTF-8',
-                            'min'      => 1,
+                            'min'      => 5,
                             'max'      => 50,
+                        	'messages' => array(
+                        		'stringLengthTooShort' => 'Пожалуйста введите строку длиной от 5 до 50 символов!',
+                        		'stringLengthTooLong' => 'Пожалуйста введите строку длиной от 5 до 50 символов!'
+                        	),
                         ),
                     ),
                 ),
@@ -46,13 +59,25 @@ class UserFormValidator {
             		),
             		'validators' => array(
             				array(
-            						'name'    => 'StringLength',
-            						'options' => array(
-            								'encoding' => 'UTF-8',
-            								'min'      => 1,
-            								'max'      => 20,
-            						),
-            				),
+		                		'name' =>'NotEmpty',
+		                		'options' => array(
+		                			'messages' => array(
+		                				\Zend\Validator\NotEmpty::IS_EMPTY => 'Логин не может быть пустым.'
+		                			),
+		                		),
+		                	),
+		                    array(
+		                        'name'    => 'StringLength',
+		                        'options' => array(
+		                            'encoding' => 'UTF-8',
+		                            'min'      => 5,
+		                            'max'      => 20,
+		                        	'messages' => array(
+		                        		'stringLengthTooShort' => 'Пожалуйста введите строку длиной от 5 до 20 символов!',
+		                        		'stringLengthTooLong' => 'Пожалуйста введите строку длиной от 5 до 20 символов!'
+		                        	),
+		                        ),
+		                    ),
             		),
             )));
             
@@ -65,13 +90,25 @@ class UserFormValidator {
             		),
             		'validators' => array(
             				array(
-            						'name'    => 'StringLength',
-            						'options' => array(
-            								'encoding' => 'UTF-8',
-            								'min'      => 1,
-            								'max'      => 20,
-            						),
-            				),
+		                		'name' =>'NotEmpty',
+		                		'options' => array(
+		                			'messages' => array(
+		                				\Zend\Validator\NotEmpty::IS_EMPTY => 'Пароль не может быть пустым.'
+		                			),
+		                		),
+		                	),
+		                    array(
+		                        'name'    => 'StringLength',
+		                        'options' => array(
+		                            'encoding' => 'UTF-8',
+		                            'min'      => 5,
+		                            'max'      => 20,
+		                        	'messages' => array(
+		                        		'stringLengthTooShort' => 'Пожалуйста введите строку длиной от 5 до 20 символов!',
+		                        		'stringLengthTooLong' => 'Пожалуйста введите строку длиной от 5 до 20 символов!'
+		                        	),
+		                        ),
+		                    ),
             		),
             )));
 

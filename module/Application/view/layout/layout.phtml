@@ -3,8 +3,6 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <?php echo $this->headTitle('ZF2 '. $this->translate('Skeleton Application'))->setSeparator(' - ')->setAutoEscape(false) ?>
-
         <?php echo $this->headMeta()->appendName('viewport', 'width=device-width, initial-scale=1.0') ?>
 
         <!-- Le styles -->
@@ -21,9 +19,16 @@
     </head>
     <body>
        <div id="wrap">
-            <?php echo $this->content; ?>
-            
-        </div> <!-- /wrap -->
-        <?php echo $this->inlineScript() ?>
+       
+	       <div id="menu">
+				<?php echo $this->navigation('navigation')->menu(); ?>
+	       </div>
+	       
+	       <div id="content">
+	            <?php echo $this->content; ?>
+	       </div>
+	       
+       </div> <!-- /wrap -->
+       <?php echo $this->inlineScript() ?>
     </body>
 </html>
