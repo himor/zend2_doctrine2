@@ -41,7 +41,7 @@ class SecurityAdapter implements AdapterInterface {
 				'role' => null);
 		$em = $this->em;
 		$userRepo = $em->getRepository('Application\Entity\User');
-		$user = $userRepo->findOneBy(array('username' => $this->username));
+		$user = $userRepo->findOneBy(array('username' => $this->username, 'isDeleted' => false));
 		if (!$user) {
 			return new AuthResult(AuthResult::FAILURE, $identity);
 		}

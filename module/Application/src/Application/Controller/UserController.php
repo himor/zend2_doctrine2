@@ -34,18 +34,27 @@ class UserController extends AbstractActionController {
 			$form->setInputFilter(UserFormValidator::getInputFilter());
             $form->setData($this->request->getPost());
             if ($form->isValid()) {
-            	// use BCrypt to create the password
-            	$bcrypt = new Bcrypt();
-            	$securePass = $bcrypt->create($user->getPassword());
-            	$user->setPassword($securePass);
             	$em = $this->getEm();
-				$em->persist($user);
-				$em->flush();
-				return $this->redirect()->toRoute('home/orders');
+            	// check uniqness
+            	$userOld = $em->getRepository('Application\Entity\User')->findOneBy(
+            			array('username' => $user->getUsername(),
+            					'isDeleted' => false));
+            	if ($userOld) {
+            		$error = "Такой пользователь уже существует.";
+            	} else {
+	            	// use BCrypt to create the password
+	            	$bcrypt = new Bcrypt();
+	            	$securePass = $bcrypt->create($user->getPassword());
+	            	$user->setPassword($securePass);
+					$em->persist($user);
+					$em->flush();
+					return $this->redirect()->toRoute('home');
+            	}
 			}
 		}
 		return new ViewModel(array(
 			'form' => $form,
+			'error' => isset($error) ? $error : null,
 		));
 	}
 	

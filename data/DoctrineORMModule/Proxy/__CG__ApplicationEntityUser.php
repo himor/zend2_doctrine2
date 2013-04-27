@@ -117,10 +117,22 @@ class User extends \Application\Entity\User implements \Doctrine\ORM\Proxy\Proxy
         return parent::setRole($role);
     }
 
+    public function getIsDeleted()
+    {
+        $this->__load();
+        return parent::getIsDeleted();
+    }
+
+    public function setIsDeleted($isDeleted)
+    {
+        $this->__load();
+        return parent::setIsDeleted($isDeleted);
+    }
+
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'id', 'fullName', 'username', 'password', 'role', 'orders');
+        return array('__isInitialized__', 'id', 'fullName', 'username', 'password', 'role', 'isDeleted', 'orders');
     }
 
     public function __clone()

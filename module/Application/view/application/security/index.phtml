@@ -22,6 +22,10 @@
 	
 	echo $this->form()->openTag($form);
 	
+		?>
+		<input type="hidden" name="redirect" value="<?php echo $redirect;?>" />
+		<?php 
+	
 	echo $this->formLabel($form->get('username'));
 	echo $this->formText($form->get('username'));
 	echo $this->formElementErrors($form->get('username'), array('class' => 'alert alert-warning'));

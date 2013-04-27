@@ -26,10 +26,16 @@ class SecurityController extends AbstractActionController {
 	 */
 	public function indexAction() {
 		$reasonId = (int) $this->params()->fromRoute('id', 0);
+		$redirect = $this->params()->fromRoute('redirect', '');
 		$form = new LoginForm();
 		if ($this->request->isPost()) {
 			$form->setInputFilter(LoginFormValidator::getInputFilter());
 			$form->setData($this->request->getPost());
+			if ($redirect == '') {
+				$data = $this->request->getPost();
+				if (isset($data['redirect']))
+					$redirect = $data['redirect'];
+			}
 			if ($form->isValid()) {
 				$data = $form->getData();
 				$username = $data['username'];
@@ -42,14 +48,22 @@ class SecurityController extends AbstractActionController {
 						$failure = 1;
 					} else {
 						// success
-						return $this->redirect()->toRoute('home/orders');
+						if (substr($redirect, 0, 4) != 'home') $redirect = 'home' . $redirect;
+						$redirect = str_replace('\\', '/', $redirect);
+						$qm = strpos($redirect, '?');
+						if ($qm != false) {
+							$redirectAction = substr($redirect, $qm + 1);
+							$redirect = substr($redirect, 0, $qm);
+						}
+						return $this->redirect()->toRoute($redirect, array('action' => ($redirectAction ? $redirectAction : '')));
 					}
 			}
 		}
 		return new ViewModel(array(
 			'form' => $form,
 			'failure' => (isset ($failure) ? true : false),
-			'reason' => $reasonId
+			'reason' => $reasonId,
+			'redirect' => ($redirect == '') ? 'home' : $redirect,
 		));
 	}
 	
@@ -63,14 +77,49 @@ class SecurityController extends AbstractActionController {
 	}
 	
 	/**
-	 * test action
+	 * edit access to resources
 	 */
-	public function viewAction() {
+	public function resourcesAction() {
+		$access = new AccessManager();
+		if (!$access->checkIdentity($this->getEm(), '/security/resources')) {
+			return $this->redirect()->toRoute('home/security', array('id'=>2, 'redirect'=>'\security?resources'));
+		}
+		
+		// use query builder to find all the unique resources;
+	}
+	
+	/**
+	 * edit users roles
+	 */
+	public function userrolesAction() {
 		$access = new AccessManager();
 		if (!$access->checkIdentity($this->getEm(), '/security/userroles')) {
-			return $this->redirect()->toRoute('home/security', array('id'=>2));
+			return $this->redirect()->toRoute('home/security', array('id'=>2, 'redirect'=>'\security?userroles'));
 		}
-		return $this->redirect()->toRoute('home/orders');		
+		$em = $this->getEm();
+		$users = $em->getRepository('Application\Entity\User')->findBy(array('isDeleted' => false));
+		if ($this->request->isPost()) {
+			$data = $this->request->getPost();
+			$nAdmin = 0;
+			foreach($users as $user) {
+				if ($user->getRole() != $data['setRole_'.$user->getId()]) {
+					$user->setRole($data['setRole_'.$user->getId()]);
+					$em->persist($user);
+				}
+				$nAdmin += ($user->getRole() == 'admin' ? 1 : 0);
+			}
+			if ($nAdmin < 1)
+				$error = "Требуется хотя бы один администратор!";
+			else {
+				$em->flush();
+				$success = "Роли успешно обновлены!";
+			}
+		}	
+		return new ViewModel(array(
+			'users' => $users,
+			'error' => isset($error) ? $error : null,
+			'success' => isset($success) ? $success : null,
+		));
 	}
 	
 }

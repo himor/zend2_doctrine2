@@ -26,6 +26,9 @@
 	    /** @ORM\Column(type="string", length=31) */
 	    protected $role;
 	    
+	    /** @ORM\Column(type="boolean") */
+	    protected $isDeleted;
+	    
 	    /**
 	     * @ORM\OneToMany(targetEntity="Application\Entity\Order", mappedBy="user")
 	     * @var Collection
@@ -35,6 +38,7 @@
 	    public function __construct() {
 	    	//Initializing collection. Doctrine recognizes Collections, not arrays!
 	    	$this->orders = new ArrayCollection();
+	    	$this->isDeleted = false;
 	    }
 	    
 	    public function setId($id) {
@@ -84,6 +88,14 @@
 	    
 	    public function setRole($role) {
 	    	$this->role = $role;
+	    }
+	    
+	    public function getIsDeleted() {
+	    	return $this->isDeleted;
+	    }
+	     
+	    public function setIsDeleted($isDeleted) {
+	    	$this->isDeleted = $isDeleted;
 	    }
 	    
 	    

@@ -14,6 +14,7 @@
 	
 	echo $this->formHidden($form->get('id'));
 	
+	if ($error) echo "<div class=\"alert alert-error\">$error</div>";
 	
 	echo $this->formLabel($form->get('fullName'));
 	echo $this->formText($form->get('fullName'));
@@ -28,7 +29,7 @@
 	echo "<br>";
 	
 	echo $this->formLabel($form->get('password'));
-	echo $this->formText($form->get('password'));
+	echo $this->formPassword($form->get('password'));
 	echo $this->formElementErrors($form->get('password'), array('class' => 'alert alert-warning'));
 	
 	echo "<br>";

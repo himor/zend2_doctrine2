@@ -1,0 +1,48 @@
+<?php
+	$title = 'Пользователи и роли';
+	$this->headTitle($title);
+?>
+<h3>
+	<?php echo $this->escapeHtml($title); ?>
+</h3>
+<?php 
+if ($error) {
+		echo "<div class='alert alert-error'>$error</div>";
+	}
+if ($success) {
+		echo "<div class='alert alert-success'>$success</div>";
+	}
+?>
+<form method="post" action="">
+<table class="table table-hover table-bordered" style="width:95%;">
+<thead>
+<tr>
+	<th width="40%">Полное имя</th>
+	<th width="25%">Логин</th>
+	<th width="35%">Роль</th>
+</tr>
+</thead>
+<tbody>
+<?php 
+	foreach ($users as $user) :?>
+	<tr>
+		<td><?php echo $user->getFullname(); ?></td>
+		<td><?php echo $user->getUsername(); ?></td>
+		<td>
+			<select name="setRole_<?php echo $user->getId();?>" class="setRole">
+				<option <?php echo ($user->getRole() == 'client' ? 'selected="selected"':'' );?> value="client">Клиент</option>
+				<option <?php echo ($user->getRole() == 'employee' ? 'selected="selected"':'' );?> value="employee">Сотрудник</option>
+				<option <?php echo ($user->getRole() == 'finance' ? 'selected="selected"':'' );?> value="finance">Бухгалтер</option>
+				<option <?php echo ($user->getRole() == 'admin' ? 'selected="selected"':'' );?> value="admin">Администратор</option>			
+			</select>		
+		</td>
+	</tr>
+<?php
+	endforeach;
+?>
+</tbody>
+</table>
+
+<button type="submit" class="btn btn-success">Сохранить</button>
+<a href="/" class="btn">Отмена</a>
+</form>
