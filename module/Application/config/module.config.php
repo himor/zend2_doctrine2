@@ -61,19 +61,33 @@ $config =  array(
                             ),
                         ),
                     ),*/
-                    'orders' => array(
+                    'cargo' => array(
 	                    'type'    => 'Segment',
 	                    'options' => array(
-	                    	'route'    => 'order[/][:action][/:id]',
+	                    	'route'    => 'cargo[/][:action][/:id]',
 			                   'constraints' => array(
 			                       'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
 			                       'id'     => '[0-9]+',
 			                   ),
 			                   'defaults' => array(
-			                       'controller' => 'Application\Controller\Order',
+			                       'controller' => 'Application\Controller\Cargo',
 			                       'action'     => 'index',
                     		),
 	                    ),
+                    ),
+                    'trans' => array(
+                    		'type'    => 'Segment',
+                    		'options' => array(
+                    				'route'    => 'trans[/][:action][/:id]',
+                    				'constraints' => array(
+                    						'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                    						'id'     => '[0-9]+',
+                    				),
+                    				'defaults' => array(
+                    						'controller' => 'Application\Controller\Trans',
+                    						'action'     => 'index',
+                    				),
+                    		),
                     ),
                     'users' => array(
                     		'type'    => 'Segment',
@@ -115,7 +129,8 @@ $config =  array(
     'controllers' => array(
         'invokables' => array(
             'Application\Controller\Index' 		=> 'Application\Controller\IndexController',
-            'Application\Controller\Order' 		=> 'Application\Controller\OrderController',
+            'Application\Controller\Cargo' 		=> 'Application\Controller\CargoController',
+            'Application\Controller\Trans' 		=> 'Application\Controller\TransController',
             'Application\Controller\User'		=> 'Application\Controller\UserController',
             'Application\Controller\Security' 	=> 'Application\Controller\SecurityController',
             'Application\Controller\Access' 	=> 'Application\Controller\AccessController',

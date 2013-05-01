@@ -22,7 +22,7 @@ class IndexController extends AbstractActionController
 	
     public function indexAction()
     {
-        return $this->redirect()->toRoute('home/orders');
+        return $this->redirect()->toRoute('home/cargo');
     }
     
     

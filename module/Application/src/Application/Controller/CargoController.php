@@ -13,7 +13,7 @@ use Application\Entity\User;
 use Application\Form\ItemForm;
 use Application\Form\ItemFormValidator;
 
-class OrderController extends AbstractActionController {
+class CargoController extends AbstractActionController {
 	
 	public function getEm() {
 		return $this
@@ -49,7 +49,7 @@ class OrderController extends AbstractActionController {
 				$em->persist($order);
 				$em->flush();
 			}
-			return $this->redirect()->toRoute('home/orders');
+			return $this->redirect()->toRoute('home/cargo');
 		}
 		return new ViewModel(array(
 			'items' => count($items) ? $items : null,
@@ -82,7 +82,7 @@ class OrderController extends AbstractActionController {
             	$em = $this->getEm();
 				$em->persist($item);
 				$em->flush();
-				return $this->redirect()->toRoute('home/orders');
+				return $this->redirect()->toRoute('home/cargo');
 			}
 		}
 		return new ViewModel(array(

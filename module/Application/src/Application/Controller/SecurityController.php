@@ -3,6 +3,9 @@ namespace Application\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
+use Zend\Crypt\Password\Bcrypt;
+use Zend\Authentication\AuthenticationService;
+use Zend\Authentication\Storage\Session as SessionStorage;
 
 use Application\Entity\User;
 
@@ -10,8 +13,6 @@ use Application\Form\LoginForm;
 use Application\Form\LoginFormValidator;
 use Application\Security\SecurityAdapter;
 use Application\Security\AccessManager;
-use Zend\Authentication\AuthenticationService;
-use Zend\Authentication\Storage\Session as SessionStorage;
 
 class SecurityController extends AbstractActionController {
 	
@@ -120,6 +121,22 @@ class SecurityController extends AbstractActionController {
 			'error' => isset($error) ? $error : null,
 			'success' => isset($success) ? $success : null,
 		));
+	}
+	
+	/**
+	 * TODO DELETE FROM PRODUCTION
+	 */
+	public function installUserAction() {
+		$em = $this->getEm();
+		$bcrypt = new Bcrypt();
+		$securePass = $bcrypt->create('admin');
+		$user = new User();
+		$user->setPassword($securePass);
+		$user->setUsername('admin');
+		$user->setFullName('Admin');
+		$em->persist($user);
+		$em->flush();
+		die('done');
 	}
 	
 }

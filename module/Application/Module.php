@@ -38,11 +38,11 @@ class Module {
         $x = include __DIR__ . '/config/module.config.php';
         if (!$this->identity) {
         	// make key routes unaccessible
-        	$x['router']['routes']['home']['child_routes']['orders'] =
+        	$x['router']['routes']['home']['child_routes']['cargo'] =
         		array(
 	        			'type'    => 'Segment',
 	        			'options' => array(
-	        					'route'    => 'order[/][:stuff]',
+	        					'route'    => 'cargo[/][:stuff]',
 	        					'constraints' => array(
 	        							'stuff' => '[a-zA-Z][a-zA-Z0-9_-]*',
 	        					),
@@ -52,6 +52,20 @@ class Module {
 	        					),
 	        			),
 	        	);
+        	$x['router']['routes']['home']['child_routes']['trans'] =
+        	array(
+        			'type'    => 'Segment',
+        			'options' => array(
+        					'route'    => 'trans[/][:stuff]',
+        					'constraints' => array(
+        							'stuff' => '[a-zA-Z][a-zA-Z0-9_-]*',
+        					),
+        					'defaults' => array(
+        							'controller' => 'Application\Controller\Security',
+        							'action'     => 'index',
+        					),
+        			),
+        	);
 	        $x['router']['routes']['home']['child_routes']['users'] =
 	        	array(
 	        			'type'    => 'Segment',
