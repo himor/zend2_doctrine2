@@ -1,0 +1,71 @@
+<?php
+	$title = 'Доступ к ресурсам';
+	$this->headTitle($title);
+?>
+<h3>
+	<?php echo $this->escapeHtml($title); ?>
+</h3>
+<?php 
+if ($error) {
+		echo "<div class='alert alert-error'>$error</div>";
+	}
+if ($success) {
+		echo "<div class='alert alert-success'>$success</div>";
+	}
+?>
+<form method="post" action="">
+<table class="table table-hover table-bordered" style="width:95%;">
+<thead>
+<tr>
+	<th width="30%">Описание</th>
+	<th width="20%">Адрес</th>
+	<th width="14%">Администратор</th>
+	<th width="12%">Бухгалтер</th>
+	<th width="12%">Сотрудник</th>
+	<th width="12%">Клиент</th>
+</tr>
+</thead>
+<tbody>
+<?php 
+	foreach ($source as $s) :?>
+	<tr>
+		<td><?php echo $s['description']; ?></td>
+		<td><?php echo $s['resource']; ?></td>
+		<td>
+			<input type="checkbox" value="1" name="admin_<?php echo $s['id'];?>" <?php echo ($s['admin'] == 0 ? '' : 'checked="checked"');?> />
+		</td>
+		<td>
+			<input type="checkbox" value="1" name="finance_<?php echo $s['id'];?>" <?php echo ($s['finance'] == 0 ? '' : 'checked="checked"');?> />
+		</td>
+		<td>
+			<input type="checkbox" value="1" name="employee_<?php echo $s['id'];?>" <?php echo ($s['employee'] == 0 ? '' : 'checked="checked"');?> />
+		</td>
+		<td>
+			<input type="checkbox" value="1" name="client_<?php echo $s['id'];?>" <?php echo ($s['client'] == 0 ? '' : 'checked="checked"');?> />
+		</td>
+		
+	</tr>
+<?php endforeach;?>
+</tbody>
+</table>
+
+<button type="submit" class="btn btn-success">Сохранить</button>
+<a href="/" class="btn">Отмена</a>
+
+<a style="float:right;margin-right:50px;" href="javascript:newUser();" class="btn btn-warning">Новый ресурс...</a>
+</form>
+
+<script>
+	
+	function newUser() {
+		var rname = prompt("Введите имя ресурса:","");
+		if (rname.length) {
+			var desc = prompt("Введите описание ресурса:","");
+			$.post('/security/newResource', {rname: rname, desc:desc}, function(data) {
+				document.location.reload(true);
+				})
+		}
+	}
+
+</script>
+

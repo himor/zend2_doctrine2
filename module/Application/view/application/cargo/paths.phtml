@@ -1,0 +1,56 @@
+<?php
+	$title = 'Маршруты';
+	$this->headTitle($title);
+?>
+
+<div id="rightHolder"></div>
+
+<h3>
+	<?php echo $this->escapeHtml($title); ?>
+</h3>
+<?php 
+if ($error) {
+		echo "<div class='alert alert-error'>$error</div>";
+	}
+if ($success) {
+		echo "<div class='alert alert-success'>$success</div>";
+	}
+?>
+
+<table class="table table-hover table-bordered" style="width:55%;">
+<thead>
+<tr>
+	<th># маршрута</th>
+	<th>Описание</th>
+</tr></thead>
+<tbody>
+	<?php foreach ($routes as $r):?>
+	<tr class="clickable" id="it_<?php echo $r->getId();?>">
+		<td><?php echo $r->getId();?></td>
+		<td><?php echo $r->getDescriptionNormal();?></td>
+	</tr>
+	<?php endforeach;?>
+</tbody>
+</table>
+
+<a href="/cargo/createPath" class="btn btn-success">Добавить</a>
+<a href="#" id="editPath" disabled="disabled" class="btn btn-warning">Редактировать</a>
+<a href="#" id="deletePath" disabled="disabled" class="btn btn-danger">Удалить</a>
+<a href="/" class="btn">Отмена</a>
+
+<script>
+	
+(function(){
+	$('.clickable').click(function(){
+		var id = $(this).attr('id').split('_');
+		$('#editPath').attr({'href':'/cargo/updatePath/'+id[1]});
+		$('#deletePath').attr({'href':'/cargo/deletePath/'+id[1]});
+		$('#editPath, #deletePath').removeAttr('disabled');
+		$.post('/cargo/getPathContent/'+id[1], {}, function(data) {
+			$('#rightHolder').html(data);
+			})
+		});
+})();
+
+</script>
+

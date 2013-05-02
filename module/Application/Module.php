@@ -25,64 +25,16 @@ class Module {
     	
     }
 
-    public function updateIdentity() {
+    /*public function updateIdentity() {
     	$auth = new AuthenticationService();
     	if ($auth->hasIdentity()) {
     		// Identity exists; get it
     		$this->identity = $auth->getIdentity();
     	}
-    }
+    }*/
     
     public function getConfig() {
-    	$this->updateIdentity();
-        $x = include __DIR__ . '/config/module.config.php';
-        if (!$this->identity) {
-        	// make key routes unaccessible
-        	$x['router']['routes']['home']['child_routes']['cargo'] =
-        		array(
-	        			'type'    => 'Segment',
-	        			'options' => array(
-	        					'route'    => 'cargo[/][:stuff]',
-	        					'constraints' => array(
-	        							'stuff' => '[a-zA-Z][a-zA-Z0-9_-]*',
-	        					),
-	        					'defaults' => array(
-	        							'controller' => 'Application\Controller\Security',
-	        							'action'     => 'index',
-	        					),
-	        			),
-	        	);
-        	$x['router']['routes']['home']['child_routes']['trans'] =
-        	array(
-        			'type'    => 'Segment',
-        			'options' => array(
-        					'route'    => 'trans[/][:stuff]',
-        					'constraints' => array(
-        							'stuff' => '[a-zA-Z][a-zA-Z0-9_-]*',
-        					),
-        					'defaults' => array(
-        							'controller' => 'Application\Controller\Security',
-        							'action'     => 'index',
-        					),
-        			),
-        	);
-	        $x['router']['routes']['home']['child_routes']['users'] =
-	        	array(
-	        			'type'    => 'Segment',
-	        			'options' => array(
-	        					'route'    => 'users[/][:stuff]',
-	        					'constraints' => array(
-	        							'stuff' => '[a-zA-Z][a-zA-Z0-9_-]*',
-	        					),
-	        					'defaults' => array(
-	        							'controller' => 'Application\Controller\Security',
-	        							'action'     => 'index',
-	        					),
-	        			),
-	        	);
-        	
-        }
-        return $x;
+        return include __DIR__ . '/config/module.config.php';
     }
 
     public function getAutoloaderConfig()

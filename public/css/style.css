@@ -65,3 +65,11 @@ ul.alert li {
 .w50 {
 	width: 50%;
 }
+
+#pathContent {
+	min-height:20px;
+	margin-bottom:10px;
+	background-color: #fff;
+	border-radius:5px;
+	padding:5px;
+}

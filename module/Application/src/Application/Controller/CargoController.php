@@ -9,9 +9,13 @@ use Application\Entity\Order;
 use Application\Entity\Item;
 use Application\Entity\OrderItem;
 use Application\Entity\User;
+use Application\Entity\Route;
+use Application\Entity\RouteCity;
 
 use Application\Form\ItemForm;
 use Application\Form\ItemFormValidator;
+
+use Application\Security\AccessManager;
 
 class CargoController extends AbstractActionController {
 	
@@ -22,15 +26,80 @@ class CargoController extends AbstractActionController {
 	}
 	
 	public function indexAction() {
-		$em = $this->getEm();
+		$access = new AccessManager();
+		if (!$access->checkIdentity($this->getEm(), '/cargo')) {
+			return $this->redirect()->toRoute('home/security', array('id'=>2, 'redirect'=>'\cargo'));
+		}
+		/*$em = $this->getEm();
 		$orderRepo = $em->getRepository('Application\Entity\Order');
 		$orders = $orderRepo -> findAll();
 		return new ViewModel(array(
 			'orders' => $orders
+		));*/
+		
+		// PERHAPS MENU ?!
+	}
+	
+	public function pathsAction() {
+		$access = new AccessManager();
+		if (!$access->checkIdentity($this->getEm(), '/cargo/paths')) {
+			return $this->redirect()->toRoute('home/security', array('id'=>2, 'redirect'=>'\cargo?paths'));
+		}
+		$em = $this->getEm();
+		$routes = $em->getRepository('Application\Entity\Route')->findBy(array('isDeleted' => false));
+		return new ViewModel(array(
+			'routes' => $routes
 		));
 	}
 	
-	public function createOrderAction() {
+	public function createPathAction() {
+		$access = new AccessManager();
+		if (!$access->checkIdentity($this->getEm(), '/cargo/createPath')) {
+			return $this->redirect()->toRoute('home/security', array('id'=>2, 'redirect'=>'\cargo?createPath'));
+		}
+		$em = $this->getEm();
+		$cities = $em->getRepository('Application\Entity\RouteCity')->findAll();
+		usort($cities, function($a,$b){
+			return ($a->getDescription() > $b->getDescription() ? 1:-1);
+		});
+		if ($this->request->isPost()) {
+			$data = $this->request->getPost();
+			if (strlen($data['description']) > 0) {
+				$path = new Route();
+				$path->setDescription($data['description']);
+				$em->persist($path);
+				$em->flush();				
+				return $this->redirect()->toRoute('home/cargo', array('action'=>'paths'));
+			}
+			$error = "Ошибка создания маршрута.";
+		}
+		return new ViewModel(array(
+			'cities' => $cities,
+			'error' => isset($error) ? $error : null,
+			'success' => isset($success) ? $success : null,
+		));
+	}
+	
+	public function updatePathAction() {
+		$access = new AccessManager();
+		if (!$access->checkIdentity($this->getEm(), '/cargo/editPath')) {
+			return $this->redirect()->toRoute('home/security', array('id'=>2, 'redirect'=>'\cargo?paths'));
+		}
+		$id = (int) $this->params()->fromRoute('id', 0);
+	}
+	
+	public function deletePathAction() {
+		$access = new AccessManager();
+		if (!$access->checkIdentity($this->getEm(), '/cargo/editPath')) {
+			return $this->redirect()->toRoute('home/security', array('id'=>2, 'redirect'=>'\cargo?paths'));
+		}
+		$id = (int) $this->params()->fromRoute('id', 0);
+	}
+	
+	/*public function createOrderAction() {
+		
+		// no security
+		
 		$em = $this->getEm();
 		$itemRepo = $em->getRepository('Application\Entity\Item');
 		$items = $itemRepo -> findAll();
@@ -54,43 +123,40 @@ class CargoController extends AbstractActionController {
 		return new ViewModel(array(
 			'items' => count($items) ? $items : null,
 		));
+	}*/
+	
+	/**
+	 * ajax call
+	 */
+	public function getPathContentAction() {
+		// no need securtiy
+		$id = (int) $this->params()->fromRoute('id', 0);
+		$this->layout('layout/empty');
+		$em = $this->getEm();
+		// find the route, decompose it and return table
+		$routeN = $em->getRepository('Application\Entity\Route')->findOneById($id);
+		$desc = $routeN->getDescription(); // One|Two|Thr-ee|Four
+		$cities = explode('|', $desc); 
+		return new ViewModel(array(
+			'cities' => $cities,
+			'route' => $routeN,
+		));
 	}
 	
 	/**
 	 * ajax call
-	 * @return \Zend\View\Model\ViewModel
 	 */
-	public function getItemsAction() {
-		$id = (int) $this->params()->fromRoute('id', 0);
+	public function createCityAction() {
+		// no need securtiy
 		$this->layout('layout/empty');
 		$em = $this->getEm();
-		$order = $em->getRepository('Application\Entity\Order')->findOneById($id);
-		return new ViewModel(array(
-			'items' => $order->getOrderItems(),
-			'orderId' => $id,
-		));
+		$rc = new RouteCity();
+		$data = $this->request->getPost();
+		$rc->setDescription($data['cname']);
+		$em->persist($rc);
+		$em->flush();
+		return "ok";
 	}
-	
-	public function createItemAction() {
-		$form = new ItemForm();
-		$item = new Item();
-		$form->bind ($item);
-		if ($this->request->isPost()) {
-			$form->setInputFilter(ItemFormValidator::getInputFilter());
-            $form->setData($this->request->getPost());
-            if ($form->isValid()) {
-            	$em = $this->getEm();
-				$em->persist($item);
-				$em->flush();
-				return $this->redirect()->toRoute('home/cargo');
-			}
-		}
-		return new ViewModel(array(
-			'form' => $form,
-		));
-	}
-	
-	
 	
 }
 ?>

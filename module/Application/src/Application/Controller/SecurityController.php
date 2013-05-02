@@ -8,6 +8,7 @@ use Zend\Authentication\AuthenticationService;
 use Zend\Authentication\Storage\Session as SessionStorage;
 
 use Application\Entity\User;
+use Application\Entity\Access;
 
 use Application\Form\LoginForm;
 use Application\Form\LoginFormValidator;
@@ -23,6 +24,7 @@ class SecurityController extends AbstractActionController {
 	}
 	
 	/**
+	 * ============================================================================
 	 * Login action /security
 	 */
 	public function indexAction() {
@@ -69,6 +71,7 @@ class SecurityController extends AbstractActionController {
 	}
 	
 	/**
+	 * ============================================================================
 	 * Logout action /security/logout
 	 */
 	public function logoutAction() {
@@ -78,6 +81,7 @@ class SecurityController extends AbstractActionController {
 	}
 	
 	/**
+	 * ============================================================================
 	 * edit access to resources
 	 */
 	public function resourcesAction() {
@@ -85,11 +89,45 @@ class SecurityController extends AbstractActionController {
 		if (!$access->checkIdentity($this->getEm(), '/security/resources')) {
 			return $this->redirect()->toRoute('home/security', array('id'=>2, 'redirect'=>'\security?resources'));
 		}
+		$em = $this->getEm();
+		$temp = $em->getRepository('Application\Entity\Access')->findAll();
+		$source = array();
+		$proc = array();
 		
-		// use query builder to find all the unique resources;
+		if ($this->request->isPost()) {
+			$data = $this->request->getPost();
+			foreach($temp as $t) {
+				$t->setPermit($data[$t->getRole()."_".md5($t->getResource())]);
+				$em->persist($t);				
+			}
+			$em->flush();
+			$success = "Ресурсы успешно обновлены!";
+		}
+		
+		foreach ($temp as $t) {
+			if (!in_array($t->getResource(), $proc)) {
+				$proc[] = $t->getResource();
+				$s = array(
+						'resource' => $t->getResource(),
+						'description' => $t->getDescription(),
+						'id' => md5($t->getResource()),
+				);
+				$s[$t->getRole()] = $t->getPermit();
+				$source[$t->getResource()] = $s;
+			} else {
+				$source[$t->getResource()][$t->getRole()] = $t->getPermit();
+			}
+		}
+		
+		return new ViewModel(array(
+				'source' => $source,
+				'error' => isset($error) ? $error : null,
+				'success' => isset($success) ? $success : null,
+		));
 	}
 	
 	/**
+	 * ============================================================================
 	 * edit users roles
 	 */
 	public function userrolesAction() {
@@ -134,11 +172,50 @@ class SecurityController extends AbstractActionController {
 		$user->setPassword($securePass);
 		$user->setUsername('admin');
 		$user->setFullName('Admin');
+		$user->setRole('admin');
 		$em->persist($user);
 		$em->flush();
 		die('done');
 	}
 	
+	/**
+	 * ============================================================================
+	 * create new resource
+	 */
+	public function newResourceAction() {
+		$em = $this->getEm();
+		$data = $this->request->getPost();
+		$a = new Access();
+		$a->setResource($data['rname']);
+		$a->setDescription($data['desc']);
+		$a->setRole('admin');
+		$a->setPermit('1');
+		$em->persist($a);
+		
+		$a = new Access();
+		$a->setResource($data['rname']);
+		$a->setDescription($data['desc']);
+		$a->setRole('finance');
+		$a->setPermit('0');
+		$em->persist($a);
+		
+		$a = new Access();
+		$a->setResource($data['rname']);
+		$a->setDescription($data['desc']);
+		$a->setRole('employee');
+		$a->setPermit('0');
+		$em->persist($a);
+		
+		$a = new Access();
+		$a->setResource($data['rname']);
+		$a->setDescription($data['desc']);
+		$a->setRole('client');
+		$a->setPermit('0');
+		$em->persist($a);
+		
+		$em->flush();
+		return "ok";
+	}
 }
 
 ?>

@@ -6,9 +6,24 @@ return array(
                  'label' => 'Домой',
                  'route' => 'home',
              ),
+        	
+        	array(
+        		'label' => 'Контейнер',
+        		'route' => 'home/cargo',
+        		'action'=> 'index',
+        		'pages' => array(
+        			array(
+        				'label' => 'Маршруты',
+        				'route' => 'home/cargo',
+        				'action'=> 'paths',
+        			),
+        		),
+        	),
+        		
         	array(
         		'label' => 'Пользователи',
         		'route' => 'home/users',
+        		'action'=> 'index',
         		'pages' => array(
         			array(
         				'label' => 'Добавить пользователя',

@@ -1,0 +1,18 @@
+<h3>Маршрут #<?php echo $route->getId();?></h3>
+<table class="table table-bordered" style="width:100%;">
+<thead>
+<tr>
+	<th>#</th>
+	<th>Населенный пункт</th>
+</tr></thead>
+<tbody>
+	
+	<?php $k = 1;
+		foreach ($cities as $o):?>
+	<tr>
+		<td><?php echo $k++; ?></td>
+		<td><?php echo $o; ?></td>
+	</tr>
+	<?php endforeach;?>
+</tbody>
+</table>

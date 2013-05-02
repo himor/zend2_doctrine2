@@ -14,6 +14,8 @@ use Application\Entity\User;
 use Application\Form\UserForm;
 use Application\Form\UserFormValidator;
 
+use Application\Security\AccessManager;
+
 class UserController extends AbstractActionController {
 	
 	public function getEm() {
@@ -23,10 +25,14 @@ class UserController extends AbstractActionController {
 	}
 	
 	public function indexAction() {
-		return $this->redirect()->toRoute('home/orders');
+		return $this->redirect()->toRoute('home/cargo');
 	}
 	
 	public function createUserAction() {
+		$access = new AccessManager();
+		if (!$access->checkIdentity($this->getEm(), '/users/createUser')) {
+			return $this->redirect()->toRoute('home/security', array('id'=>2, 'redirect'=>'\users?createUser'));
+		}
 		$form = new UserForm();
 		$user = new User();
 		$form->bind ($user);
