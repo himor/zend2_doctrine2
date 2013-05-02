@@ -4,6 +4,7 @@ namespace Application\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
+use Zend\Authentication\AuthenticationService;
 
 use Application\Entity\Order;
 use Application\Entity\Item;
@@ -30,14 +31,15 @@ class CargoController extends AbstractActionController {
 		if (!$access->checkIdentity($this->getEm(), '/cargo')) {
 			return $this->redirect()->toRoute('home/security', array('id'=>2, 'redirect'=>'\cargo'));
 		}
-		/*$em = $this->getEm();
-		$orderRepo = $em->getRepository('Application\Entity\Order');
-		$orders = $orderRepo -> findAll();
-		return new ViewModel(array(
-			'orders' => $orders
-		));*/
 		
-		// PERHAPS MENU ?!
+		$auth = new AuthenticationService();
+		if ($auth->hasIdentity()) {
+			$identity = $auth->getIdentity();
+			$role = $identity['role'];
+		}
+		return new ViewModel(array(
+			'role' => isset($role) ? $role : null
+		));
 	}
 	
 	public function pathsAction() {
@@ -86,6 +88,27 @@ class CargoController extends AbstractActionController {
 			return $this->redirect()->toRoute('home/security', array('id'=>2, 'redirect'=>'\cargo?paths'));
 		}
 		$id = (int) $this->params()->fromRoute('id', 0);
+		$em = $this->getEm();
+		$route = $em->getRepository('Application\Entity\Route')->findOneById($id);
+		if (!$route) return $this->redirect()->toRoute('home/cargo', array('action'=>'paths'));
+		$desc = $route->getDescription(); // One|Two|Thr-ee|Four
+		$cities = explode('|', $desc);
+		if ($this->request->isPost()) {
+			$data = $this->request->getPost();
+			if (strlen($data['description']) > 0) {
+				$route->setDescription($data['description']);
+				$em->persist($route);
+				$em->flush();				
+				return $this->redirect()->toRoute('home/cargo', array('action'=>'paths'));
+			}
+			$error = "Ошибка создания маршрута.";
+		}		
+		return new ViewModel(array(
+				'route' => $route,
+				'cities' => $cities,
+				'error' => isset($error) ? $error : null,
+				'success' => isset($success) ? $success : null,
+		));
 	}
 	
 	public function deletePathAction() {
@@ -94,6 +117,14 @@ class CargoController extends AbstractActionController {
 			return $this->redirect()->toRoute('home/security', array('id'=>2, 'redirect'=>'\cargo?paths'));
 		}
 		$id = (int) $this->params()->fromRoute('id', 0);
+		$em = $this->getEm();
+		$route = $em->getRepository('Application\Entity\Route')->findOneById($id);
+		if ($route) {
+			$route->setDeleted(true);
+			$em->persist($route);
+			$em->flush();
+		}
+		return $this->redirect()->toRoute('home/cargo', array('action'=>'paths'));
 	}
 	
 	/*public function createOrderAction() {

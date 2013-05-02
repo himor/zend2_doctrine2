@@ -1,0 +1,122 @@
+<?php
+	$title = 'Новый маршрут';
+	$this->headTitle($title);
+?>
+
+<h3>
+	<?php echo $this->escapeHtml($title); ?>
+</h3>
+<?php 
+if ($error) {
+		echo "<div class='alert alert-error'>$error</div>";
+	}
+if ($success) {
+		echo "<div class='alert alert-success'>$success</div>";
+	}
+?>
+
+<fieldset class="well">
+	<div id="pathContent">
+	</div>
+	<a href="javascript:clear();" class="btn"><i class="icon-remove"></i> Удалить</a>
+	<a href="javascript:undo();" class="btn"><i class="icon-arrow-left"></i> Отменить</a>
+</fieldset>
+
+<?php 
+	$k = array(array(), array(), array());
+	$i = 0;
+	foreach ($cities as $c) {
+		$k[$i++][] = $c;
+		if ($i > 2) $i = 0; 
+	}
+?>
+
+<h5>Составьте маршрут из городов:</h5>
+<table style="width:90%">
+<tr style="vertical-align: top;">
+<td id="firstColumn" style="width:30%"><?php
+	foreach ($k[0] as $c)
+		echo "<a href=\"javascript:addToPath('".$c->getDescription()."');\">".$c->getDescription()."</a><br />";
+?></td>
+<td style="width:30%"><?php
+	foreach ($k[1] as $c)
+		echo "<a href=\"javascript:addToPath('".$c->getDescription()."');\">".$c->getDescription()."</a><br />";
+?></td>
+<td style="width:30%"><?php
+	foreach ($k[2] as $c)
+		echo "<a href=\"javascript:addToPath('".$c->getDescription()."');\">".$c->getDescription()."</a><br />";
+?></td>
+</tr>
+</table>
+<br />
+
+
+<a href="javascript:addCity();"><i class="icon-plus"></i> Добавить город</a>
+<div class="form-inline" style="margin-top:10px;">
+	<input type="text" style="display:none;" id="addCity"/>
+	<button type="button" style="display:none;" class="btn" onClick="javascript:addAction();">Добавить</button>
+	</div>
+<br />
+
+<form method="post">
+	<input type="hidden" name="description" id="desc" />
+	<button class="btn btn-success" type="submit">Сохранить</button>
+	<a href="/" class="btn">Отменить</a>
+</form>
+
+<script>
+
+	var path = new Array();
+	var j = 0;
+
+	function addToPath(name) {
+		path[j] = name;
+		j++;
+		compose();
+	}
+
+	function undo() {
+		j--;
+		compose();
+	}
+
+	function compose() {
+		var output = "",
+			hid = "";
+		for (i = 0; i < j; i++) {
+			if (output != "") output += " - ";
+			output += path[i];
+			if (hid != "") hid += "|";
+			hid += path[i];
+		}
+		$('#desc').val(hid);
+		$('#pathContent').html(output);
+	}
+	
+	function clear() {
+		$('#desc').val('');
+		$('#pathContent').html('');
+		path = new Array();
+		j = 0;
+	}
+
+	function addCity() {
+		$('#addCity, #addCity + button').show();
+		$('#addCity').focus();				
+	}
+
+	function addAction() {
+		var cname = $('#addCity').val();
+		if (cname == "") return;
+		$.post('/cargo/createCity', {cname: cname}, function(data) {
+			var newA = $('<a/>');
+			newA.attr('href', "javascript:addToPath('"+cname+"');");
+			newA.text(cname);
+			$('#firstColumn').append(newA);
+			$('#firstColumn').append('<br />');
+			$('#addCity').val('');
+			$('#addCity, #addCity + button').hide();
+			})
+	}
+
+</script>
