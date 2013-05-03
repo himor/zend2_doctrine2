@@ -20,6 +20,7 @@ class AccessManager {
 		
 	private $acl;
 	private $em;
+	private $myRes;
 	
 	const YES = 1;
 	const NO  = 0;
@@ -40,6 +41,8 @@ class AccessManager {
 		$acl->addResource(new Resource('/security/userroles'));
 		$acl->allow('admin', '/security/resources');
 		$acl->allow('admin', '/security/userroles');
+		$this->myRes['admin'][] = '/security/resources';
+		$this->myRes['admin'][] = '/security/userroles';
 		// EOF define main security list
 		
 		$accessRepo = $this->em->getRepository('Application\Entity\Access');
@@ -49,8 +52,10 @@ class AccessManager {
 			$newRes = new Resource($a->getResource());
 			if (!$acl->hasResource($newRes))
 				$acl->addResource($newRes);
-			if ($a->getPermit() == AccessManager::YES)
+			if ($a->getPermit() == AccessManager::YES) {
 				$acl->allow($a->getRole(), $a->getResource());
+				$this->myRes[$a->getRole()][] = $a->getResource();
+			}
 			if ($a->getPermit() == AccessManager::NO)
 				$acl->deny($a->getRole(), $a->getResource());
 		}
@@ -71,6 +76,21 @@ class AccessManager {
 			return $this->acl->isAllowed($identity['role'], $resource);
 		} else
 			return false;
+	}
+	
+	/**
+	 * returns array of resources I can access 
+	 */
+	public function getMyRules() {
+		$auth = new AuthenticationService();
+		if ($auth->hasIdentity()) {
+			// Identity exists; get it
+			$identity = $auth->getIdentity();
+			return $this->myRes[$identity['role']];
+		} else {
+			return array();
+		}
+		
 	}
 	
 }

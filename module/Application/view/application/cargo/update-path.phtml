@@ -1,5 +1,5 @@
 <?php
-	$title = 'Новый маршрут';
+	$title = 'Изменение маршрута';
 	$this->headTitle($title);
 ?>
 
@@ -17,6 +17,7 @@ if ($success) {
 
 <fieldset class="well">
 	<div id="pathContent">
+	<?php echo $route->getDescriptionNormal(false);?>
 	</div>
 	<a href="javascript:clear();" class="btn"><i class="icon-remove"></i> Удалить</a>
 	<a href="javascript:undo();" class="btn"><i class="icon-arrow-left"></i> Отменить</a>
@@ -61,13 +62,19 @@ if ($success) {
 <form method="post">
 	<input type="hidden" name="description" id="desc" />
 	<button class="btn btn-success" type="submit">Сохранить</button>
-	<a href="/" class="btn">Отменить</a>
+	<a href="/cargo/paths" class="btn">Отменить</a>
 </form>
 
 <script>
 
-	var path = new Array();
-	var j = 0;
+	var path = new Array(<?php 
+		$x = 0;
+		foreach ($routeCities as $r)
+			echo '"' . $r . '"' . ((++$x) < count($routeCities) ? ',' : '');
+				
+	?>);
+	var j = <?php echo count($routeCities);?>;
+	
 
 	function addToPath(name) {
 		path[j] = name;
@@ -118,5 +125,7 @@ if ($success) {
 			$('#addCity, #addCity + button').hide();
 			})
 	}
+
+	(function(){compose();})();
 
 </script>

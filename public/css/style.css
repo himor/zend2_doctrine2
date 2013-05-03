@@ -28,7 +28,8 @@ label span {
 
 
 #content {
-	margin-left:220px;
+	/*margin-left:220px;*/
+	margin:0px 20px;
 }
 
 #menu {
@@ -73,3 +74,30 @@ ul.alert li {
 	border-radius:5px;
 	padding:5px;
 }
+
+.mainMenu .header {
+	width:90%;
+	margin:auto;
+	padding:10px;
+	background-color: #eee;
+	border-bottom:1px solid #ddd;
+	border-top: 1px solid #f6f6f6;
+	text-align: center;
+	text-transform: uppercase;
+	font-weight: bold;
+}
+
+.mainMenu .content2 ul,
+.mainMenu .content ul {
+	width:90%;
+	margin:auto;
+	text-align: center;
+	list-style-type: none;
+	padding:0px;
+}
+
+.mainMenu .content2 ul li a,
+.mainMenu .content ul li a {
+	display:block;
+	padding:10px;	
+	}

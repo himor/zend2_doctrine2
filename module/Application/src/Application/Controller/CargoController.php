@@ -37,8 +37,10 @@ class CargoController extends AbstractActionController {
 			$identity = $auth->getIdentity();
 			$role = $identity['role'];
 		}
+		
 		return new ViewModel(array(
-			'role' => isset($role) ? $role : null
+			'role' => isset($role) ? $role : null,
+			'permits' => $access->getMyRules(),
 		));
 	}
 	
@@ -91,8 +93,11 @@ class CargoController extends AbstractActionController {
 		$em = $this->getEm();
 		$route = $em->getRepository('Application\Entity\Route')->findOneById($id);
 		if (!$route) return $this->redirect()->toRoute('home/cargo', array('action'=>'paths'));
-		$desc = $route->getDescription(); // One|Two|Thr-ee|Four
-		$cities = explode('|', $desc);
+		$routeCities = explode('|', $route->getDescription());
+		$cities = $em->getRepository('Application\Entity\RouteCity')->findAll();
+		usort($cities, function($a,$b){
+			return ($a->getDescription() > $b->getDescription() ? 1:-1);
+		});
 		if ($this->request->isPost()) {
 			$data = $this->request->getPost();
 			if (strlen($data['description']) > 0) {
@@ -105,6 +110,7 @@ class CargoController extends AbstractActionController {
 		}		
 		return new ViewModel(array(
 				'route' => $route,
+				'routeCities' => $routeCities,
 				'cities' => $cities,
 				'error' => isset($error) ? $error : null,
 				'success' => isset($success) ? $success : null,

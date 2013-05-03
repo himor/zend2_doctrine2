@@ -49,9 +49,9 @@ class Route {
 		$this->isDeleted = $isDeleted;
 	}
 	
-	public function getDescriptionNormal() {
+	public function getDescriptionNormal($crop = true) {
 		$d = explode('|',$this->description);
-		if (count($d) > 3) {
+		if (count($d) > 3 && $crop) {
 			$d = array($d[0], $d[1], '...', $d[count($d)-1]);
 		}
 		return implode(' - ', $d);

@@ -20,7 +20,7 @@ if ($success) {
 <table class="table table-hover table-bordered" style="width:55%;">
 <thead>
 <tr>
-	<th># маршрута</th>
+	<th style="width:25%"># маршрута</th>
 	<th>Описание</th>
 </tr></thead>
 <tbody>
@@ -42,6 +42,7 @@ if ($success) {
 	
 (function(){
 	$('.clickable').click(function(){
+		$(this).css({'font-weight':'bold', 'color':'navy'}).siblings().css({'font-weight':'normal', 'color':'black'});
 		var id = $(this).attr('id').split('_');
 		$('#editPath').attr({'href':'/cargo/updatePath/'+id[1]});
 		$('#deletePath').attr({'href':'/cargo/deletePath/'+id[1]});

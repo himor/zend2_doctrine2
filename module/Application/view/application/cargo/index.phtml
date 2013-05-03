@@ -1,52 +1,58 @@
-<h3>Traffic</h3>
+<h3>Главное меню</h3>
 
 <div class="mainMenu">
 
-<div class="header">
-Header1
-</div>
-<div class="content">
-	<ul>
-		<li><a href="">Menu1</a></li>	
-		<li><a href="">Menu2</a></li>
-		<li><a href="">Menu3</a></li>
-	</ul>
-</div>
-
-<div class="header">
-Header2
-</div>
-<div class="content">
-	<ul>
-		<li><a href="">Menu1</a></li>	
-		<li><a href="">Menu2</a></li>
-		<li><a href="">Menu3</a></li>
-	</ul>
-</div>
-
-
-
-</div>
-
-
-
-<?php 
-	if ($role == 'admin') :
+	<div class="header">
+	Контейнеры
+	</div>
+	<div class="content">
+		<ul>
+			<?php if(in_array('/cargo', $permits)): ?><li><a href="/cargo">		Главная</a></li><?php endif; ?>
+			<?php if(in_array('/cargo/paths', $permits)): ?><li><a href="/cargo/paths">	Маршруты</a></li><?php endif; ?>
+			
+		</ul>
+	</div>
 	
-	
-	
-	
-	
-	endif;
-?>
+	<div class="header">
+	Транзакции
+	</div>
+	<div class="content">
+		<ul>
+			<li><a href="">Menu1</a></li>	
+			<li><a href="">Menu2</a></li>
+			<li><a href="">Menu3</a></li>
+		</ul>
+	</div>
+
+	<div class="header">
+	Настройки
+	</div>
+	<div class="content">
+		<ul>
+			<?php if(in_array('/users/createUser', $permits)): ?><li><a href="/users/createUser">	Добавить пользователя</a></li>	<?php endif; ?>
+			<?php if(in_array('/security/userroles', $permits)): ?><li><a href="/security/userroles">	Настроить роли</a></li><?php endif; ?>
+			<?php if(in_array('/security/resources', $permits)): ?><li><a href="/security/resources">	Доступ к ресурсам</a></li><?php endif; ?>
+		</ul>
+	</div>	
+
+	<div class="content2">
+		<ul>
+			<li><a href="/security/logout">Выход</a></li>	
+		</ul>
+	</div>
+
+</div>
 
 <script>
 (function(){
 	$(".mainMenu .content").hide();
-	$(".mainMenu .header").on('click', function() {
-
-
+	$(".mainMenu .header").on('mouseenter', function() {
+		$(this).next()
+				.slideDown(250)
+				.siblings('.content').
+					slideUp(200);
 		});
+	$(".mainMenu .header:first-child").next().show();
 })();
 
 
