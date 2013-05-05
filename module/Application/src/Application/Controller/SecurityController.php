@@ -166,14 +166,44 @@ class SecurityController extends AbstractActionController {
 	 */
 	public function installUserAction() {
 		$em = $this->getEm();
-		$bcrypt = new Bcrypt();
-		$securePass = $bcrypt->create('admin');
-		$user = new User();
-		$user->setPassword($securePass);
-		$user->setUsername('admin');
-		$user->setFullName('Admin');
-		$user->setRole('admin');
-		$em->persist($user);
+ 		$bcrypt = new Bcrypt();
+ 		$securePass = $bcrypt->create('admin');
+ 		$user = new User();
+ 		$user->setPassword($securePass);
+ 		$user->setUsername('admin');
+ 		$user->setFullName('Admin');
+ 		$user->setRole('admin');
+ 		$em->persist($user);
+		
+		$res = array('/cargo','/cargo/paths','/cargo/createPath','/cargo/editPath','/users/createUser');
+		
+		foreach ($res as $r) {
+			$access = new Access();
+			$access->setResource($r);
+			$access->setPermit(1);
+			$access->setDescription('');
+			$access->setRole('admin');
+			$em->persist($access);
+			$access = new Access();
+			$access->setResource($r);
+			$access->setPermit(0);
+			$access->setDescription('');
+			$access->setRole('employee');
+			$em->persist($access);
+			$access = new Access();
+			$access->setResource($r);
+			$access->setPermit(0);
+			$access->setDescription('');
+			$access->setRole('client');
+			$em->persist($access);
+			$access = new Access();
+			$access->setResource($r);
+			$access->setPermit(0);
+			$access->setDescription('');
+			$access->setRole('finance');
+			$em->persist($access);
+		}
+		
 		$em->flush();
 		die('done');
 	}

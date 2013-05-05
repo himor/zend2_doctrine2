@@ -50,7 +50,7 @@ if ($success) {
 </table>
 
 <button type="submit" class="btn btn-success">Сохранить</button>
-<a href="/" class="btn">Отмена</a>
+<a href="<?php echo $this->url('home');?>" class="btn">Отмена</a>
 
 <a style="float:right;margin-right:50px;" href="javascript:newUser();" class="btn btn-warning">Новый ресурс...</a>
 </form>
@@ -61,7 +61,7 @@ if ($success) {
 		var rname = prompt("Введите имя ресурса:","");
 		if (rname.length) {
 			var desc = prompt("Введите описание ресурса:","");
-			$.post('/security/newResource', {rname: rname, desc:desc}, function(data) {
+			$.post('<?php echo $this->url('home/security', array('action'=>'newResource'));?>', {rname: rname, desc:desc}, function(data) {
 				document.location.reload(true);
 				})
 		}

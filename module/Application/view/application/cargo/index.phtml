@@ -7,8 +7,8 @@
 	</div>
 	<div class="content">
 		<ul>
-			<?php if(in_array('/cargo', $permits)): ?><li><a href="/cargo">		Главная</a></li><?php endif; ?>
-			<?php if(in_array('/cargo/paths', $permits)): ?><li><a href="/cargo/paths">	Маршруты</a></li><?php endif; ?>
+			<?php if(in_array('/cargo', $permits)): ?><li><a href="<?php echo $this->url('home/cargo');?>"> Главная</a></li><?php endif; ?>
+			<?php if(in_array('/cargo/paths', $permits)): ?><li><a href="<?php echo $this->url('home/cargo', array('action'=>'paths'));?>">	Маршруты</a></li><?php endif; ?>
 			
 		</ul>
 	</div>
@@ -29,15 +29,15 @@
 	</div>
 	<div class="content">
 		<ul>
-			<?php if(in_array('/users/createUser', $permits)): ?><li><a href="/users/createUser">	Добавить пользователя</a></li>	<?php endif; ?>
-			<?php if(in_array('/security/userroles', $permits)): ?><li><a href="/security/userroles">	Настроить роли</a></li><?php endif; ?>
-			<?php if(in_array('/security/resources', $permits)): ?><li><a href="/security/resources">	Доступ к ресурсам</a></li><?php endif; ?>
+			<?php if(in_array('/users/createUser', $permits)): ?><li><a href="<?php echo $this->url('home/users', array('action'=>'createUser'));?>">Добавить пользователя</a></li>	<?php endif; ?>
+			<?php if(in_array('/security/userroles', $permits)): ?><li><a href="<?php echo $this->url('home/security', array('action'=>'userroles'));?>">Настроить роли</a></li><?php endif; ?>
+			<?php if(in_array('/security/resources', $permits)): ?><li><a href="<?php echo $this->url('home/security', array('action'=>'resources'));?>">Доступ к ресурсам</a></li><?php endif; ?>
 		</ul>
 	</div>	
 
 	<div class="content2">
 		<ul>
-			<li><a href="/security/logout">Выход</a></li>	
+			<li><a href="<?php echo $this->url('home/security', array('action'=>'logout'));?>">Выход</a></li>	
 		</ul>
 	</div>
 

@@ -42,7 +42,7 @@
 	echo $this->formHidden($form->get('csrf'));
 	
 	echo $this->formElement($form->get('submit'));
-	echo " <a href='/' class='btn'>Отмена</a>";
+	echo " <a href='".$this->url('home')."' class='btn'>Отмена</a>";
 	echo $this->form()->closeTag();
 	
 ?>

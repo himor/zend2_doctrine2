@@ -33,10 +33,10 @@ if ($success) {
 </tbody>
 </table>
 
-<a href="/cargo/createPath" class="btn btn-success">Добавить</a>
+<a href="<?php echo $this->url('home/cargo', array('action'=>'createPath'));?>" class="btn btn-success">Добавить</a>
 <a href="#" id="editPath" disabled="disabled" class="btn btn-warning">Редактировать</a>
 <a href="#" id="deletePath" disabled="disabled" class="btn btn-danger">Удалить</a>
-<a href="/" class="btn">Отмена</a>
+<a href="<?php echo $this->url('home');?>" class="btn">Отмена</a>
 
 <script>
 	
@@ -44,10 +44,10 @@ if ($success) {
 	$('.clickable').click(function(){
 		$(this).css({'font-weight':'bold', 'color':'navy'}).siblings().css({'font-weight':'normal', 'color':'black'});
 		var id = $(this).attr('id').split('_');
-		$('#editPath').attr({'href':'/cargo/updatePath/'+id[1]});
-		$('#deletePath').attr({'href':'/cargo/deletePath/'+id[1]});
+		$('#editPath').attr({'href':'<?php echo $this->url('home/cargo', array('action'=>'updatePath'));?>/'+id[1]});
+		$('#deletePath').attr({'href':'<?php echo $this->url('home/cargo', array('action'=>'deletePath'));?>'+id[1]});
 		$('#editPath, #deletePath').removeAttr('disabled');
-		$.post('/cargo/getPathContent/'+id[1], {}, function(data) {
+		$.post('<?php echo $this->url('home/cargo', array('action'=>'getPathContent'));?>/'+id[1], {}, function(data) {
 			$('#rightHolder').html(data);
 			})
 		});

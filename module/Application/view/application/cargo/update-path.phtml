@@ -62,7 +62,7 @@ if ($success) {
 <form method="post">
 	<input type="hidden" name="description" id="desc" />
 	<button class="btn btn-success" type="submit">Сохранить</button>
-	<a href="/cargo/paths" class="btn">Отменить</a>
+	<a href="<?php echo $this->url('home/cargo', array('action'=>'paths'));?>" class="btn">Отменить</a>
 </form>
 
 <script>
@@ -115,7 +115,7 @@ if ($success) {
 	function addAction() {
 		var cname = $('#addCity').val();
 		if (cname == "") return;
-		$.post('/cargo/createCity', {cname: cname}, function(data) {
+		$.post('<?php echo $this->url('home/cargo', array('action'=>'createCity'));?>', {cname: cname}, function(data) {
 			var newA = $('<a/>');
 			newA.attr('href', "javascript:addToPath('"+cname+"');");
 			newA.text(cname);
